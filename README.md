@@ -19,6 +19,23 @@ The webhook can represent incoming messages from platforms such as WhatsApp, Tel
 
 The demo uses a webhook because it keeps the workflow platform-independent.
 
+## Who This Works For
+
+Any business that receives customer questions about orders, delivery status, account information, bookings, or service updates and wants a faster first response without manually checking records every time.
+
+| Sector | Why It Fits |
+|---|---|
+| E-commerce & Retail | Customers frequently ask about order status, delivery updates, and tracking codes. |
+| SaaS & Software | Support teams can answer account or subscription questions using structured customer records. |
+| Logistics & Delivery | Order status, shipment stage, and tracking details can be retrieved before generating a reply. |
+| Hospitality & Travel | Booking status, reservation details, and guest support messages can be handled through the same pattern. |
+| Education & E-learning | Student or learner records can be checked before sending personalized support responses. |
+| Healthcare & Clinics | Appointment and patient-support workflows can use the same lookup-first design, with proper privacy controls. |
+| Professional Services | Client status, case progress, and basic service updates can be answered from a verified database. |
+| Customer Support Teams | Automates the first-pass lookup and response drafting that agents often do manually. |
+
+If a team already stores customer information in a structured database, this workflow shows how AI can turn that data into a clear customer-facing response.
+
 ## Architecture
 
 ```mermaid
@@ -33,9 +50,21 @@ flowchart LR
     H --> G
 ```
 
-## Workflow Screenshot
+## Screenshots
 
-![n8n workflow overview](screenshots/workflow-overview.png)
+### n8n Workflow Canvas
+
+![n8n workflow canvas](screenshots/n8n-workflow-canvas.png)
+
+### Airtable Customer Table
+
+The Airtable screenshot uses demo records. Phone numbers are blurred before publishing.
+
+![Airtable demo customer table](screenshots/airtable-demo-customers.png)
+
+### Public-Safe Architecture Diagram
+
+![Public-safe workflow overview](screenshots/workflow-overview.png)
 
 ## Tech Stack
 
@@ -95,20 +124,22 @@ Airtable is the source of truth. The AI only receives the current Airtable recor
 
 ```text
 .
-├── docs/
-│   ├── SECURITY.md
-│   └── SETUP.md
-├── sample-data/
-│   ├── sample-customers.csv
-│   ├── sample-error-response.json
-│   ├── sample-request.json
-│   └── sample-success-response.json
-├── screenshots/
-│   └── workflow-overview.png
-├── workflow.json
-├── .gitignore
-├── LICENSE
-└── README.md
+|-- docs/
+|   |-- SECURITY.md
+|   `-- SETUP.md
+|-- sample-data/
+|   |-- sample-customers.csv
+|   |-- sample-error-response.json
+|   |-- sample-request.json
+|   `-- sample-success-response.json
+|-- screenshots/
+|   |-- airtable-demo-customers.png
+|   |-- n8n-workflow-canvas.png
+|   `-- workflow-overview.png
+|-- workflow.json
+|-- .gitignore
+|-- LICENSE
+`-- README.md
 ```
 
 ## Setup
