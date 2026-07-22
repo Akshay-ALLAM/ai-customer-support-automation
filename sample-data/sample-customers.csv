@@ -1,0 +1,5 @@
+customer_id,name,phone_number,order_id,order_status,tracking_code,pincode,address,last_updated
+CUST001,Aarav Mehta,+33123456780,ORD-1001,Shipped,TRK-FR-1001,75001,"12 Rue Demo, Paris",2026-07-20
+CUST002,Maya Rao,+33123456781,ORD-1002,Processing,TRK-FR-1002,75002,"45 Avenue Sample, Paris",2026-07-21
+CUST003,Lucas Martin,+33123456782,ORD-1003,Out for delivery,TRK-FR-1003,75003,"8 Boulevard Fictional, Paris",2026-07-22
+CUST004,Sofia Bernard,+33123456783,ORD-1004,Delayed,TRK-FR-1004,75004,"19 Street Placeholder, Paris",2026-07-22

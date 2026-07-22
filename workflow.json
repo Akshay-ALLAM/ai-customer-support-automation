@@ -1,0 +1,256 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "customer-support",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e7fb4b49-ff1b-4b7e-b23a-0500a46102b0",
+      "name": "Webhook",
+      "webhookId": "YOUR_N8N_WEBHOOK_ID"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "AI Customer Support",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "customers",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID/YOUR_AIRTABLE_TABLE_ID"
+        },
+        "filterByFormula": "={{ \"{Customer ID} = '\" + $json.body.customer_id + \"'\" }}",
+        "returnAll": false,
+        "options": {},
+        "sort": {
+          "property": []
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "a10eab55-53c8-47fd-aefe-5fcc22ccdf11",
+      "name": "Search records",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "",
+          "name": ""
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ \n\"Customer message: \" + $(\"Webhook\").item.json.body.message +\n\"\\n\\nCustomer information:\" +\n\"\\nName: \" + $json.fields.Name +\n\"\\nCustomer ID: \" + $json.fields[\"Customer ID\"] +\n\"\\nOrder ID: \" + $json.fields[\"Order ID\"] +\n\"\\nOrder Status: \" + $json.fields[\"Order Status\"] +\n\"\\nTracking Code: \" + $json.fields[\"Tracking Code\"] +\n\"\\nLast Updated: \" + $json.fields[\"last updated\"] +\n\"\\nAddress: \" + $json.fields.Address +\n\"\\n\\nWrite a short, polite customer-support reply using only this information.\"\n}}",
+        "options": {
+          "systemMessage": "Answer the customer’s message directly in a short WhatsApp-style reply.\nUse only the supplied facts.\nDo not infer anything beyond the exact order status.",
+          "returnIntermediateSteps": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        640,
+        -240
+      ],
+      "id": "7f610803-132f-4e1c-aafc-31bc9edbb119",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        352,
+        -176
+      ],
+      "id": "d487f78a-2fe4-4662-9342-ff7bb20eb56d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "",
+          "name": ""
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1088,
+        0
+      ],
+      "id": "81fc94a4-7a19-4e19-839f-83ba16421557",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c24c9193-86ae-451b-82a2-0fabcd33c3f4",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "59cf9502-7bd0-49cc-af5e-fd3edf45db47",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0318ff4d-bb7d-42e7-bcad-49c2890b0ea1",
+              "name": "success",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "63f25aad-e010-4d9f-ae66-54403623250b",
+              "name": "message",
+              "value": "\"Customer ID not found\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        112
+      ],
+      "id": "5053e6e0-0162-4075-8468-609ad1b12b7b",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3284937ae8adc4d4f78e1dc7a0954e82cedf89e7e6f523669eae1d6757854ca9",
+    "publicExportNote": "Scrubbed public export. Replace Airtable/Gemini credentials and Airtable IDs inside n8n after import."
+  }
+}
