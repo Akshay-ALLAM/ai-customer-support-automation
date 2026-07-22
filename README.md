@@ -6,6 +6,12 @@ This portfolio project demonstrates how a support request can be received from a
 
 > This is a portfolio automation demo. It is not presented as an enterprise production platform.
 
+## Demo
+
+![Customer support automation demo](demo/customer-support-demo-redacted.gif)
+
+The demo shows a webhook request sent from Hoppscotch, the n8n workflow execution path, and the JSON response returned by the automation. The live webhook URL is hidden for privacy.
+
 ## What It Does
 
 The workflow receives a customer message, searches Airtable by `customer_id`, checks whether the customer exists, and returns either:
