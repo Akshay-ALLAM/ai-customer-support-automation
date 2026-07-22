@@ -13,6 +13,7 @@ service-account*.json
 # Raw/private exports kept for local audit only
 workflow-clipboard-raw.json
 *-raw.json
+gitleaks-report.json
 
 # Local n8n/runtime files
 .n8n/
