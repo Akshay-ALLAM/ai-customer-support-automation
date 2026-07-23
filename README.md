@@ -189,9 +189,20 @@ See [docs/SECURITY.md](docs/SECURITY.md) for the review checklist.
 - Add confidence scoring before sending AI responses.
 - Add human handoff for uncertain or sensitive requests.
 
-## Recruiter Notes
+## What This Project Demonstrates
 
-This project demonstrates practical skills in workflow automation, API-based integrations, structured data lookup, AI response generation, and basic error handling. The strongest part is the architecture: the AI is used only after a database lookup, which keeps responses grounded in verified customer data.
+- Webhook-based automation that can receive requests from external platforms.
+- Airtable lookup logic for retrieving structured customer and order data.
+- Conditional routing with separate success and fallback response paths.
+- Connecting Google Gemini to a real n8n automation workflow.
+- Grounded AI response generation using database records instead of memory.
+- JSON request and response handling for API-style customer support flows.
+- Credential hygiene through scrubbed workflow exports and public placeholders.
+- Privacy-aware portfolio presentation with redacted URLs and blurred demo data.
+
+## Author
+
+Built by **Akshay Allam**.
 
 ## License
 
